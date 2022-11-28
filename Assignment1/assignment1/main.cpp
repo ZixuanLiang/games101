@@ -41,14 +41,10 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
 {
     // Students will implement this function
 
-    Eigen::Matrix4f projection = Eigen::Matrix4f::Identity();
-
-    // TODO: Implement this function
-    // Create the projection matrix for the given parameters.
-    // Then return it.
-    Eigen::Matrix4f persp, ortho, translate, scale;
+    Eigen::Matrix4f projection;
+    Eigen::Matrix4f persp, translate, scale;
     double halfViewAngle = eye_fov / 180 * M_PI / 2;
-    float halfHeight = tan(halfViewAngle) * zNear, halfWidth = halfHeight * aspect_ratio;
+    float halfHeight = -tan(halfViewAngle) * zNear, halfWidth = halfHeight * aspect_ratio;
 
     persp << zNear, 0, 0, 0,
         0, zNear, 0, 0,
@@ -64,8 +60,7 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
         0, 1 / halfHeight, 0, 0,
         0, 0, 2 / (zNear - zFar), 0,
         0, 0, 0, 1;
-    ortho = scale * translate;
-    projection = ortho * persp;
+    projection = scale * translate * persp * projection;
     return projection;
 }
 
